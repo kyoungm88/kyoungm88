@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/layout_textureview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layoutMnistInfo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#304bba9d"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/tvPrediction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prediction : "
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/tvPredictionResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            app:layout_constraintLeft_toRightOf="@id/tvPrediction" />
+
+        <TextView
+            android:id="@+id/tvCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time cost : "
+            android:textColor="#ffffff"
+            app:layout_constraintTop_toBottomOf="@id/tvPrediction"/>
+
+        <TextView
+            android:id="@+id/tvCostResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            app:layout_constraintLeft_toRightOf="@id/tvCost"
+            app:layout_constraintTop_toBottomOf="@id/tvPredictionResult"/>
+
+        <TextView
+            android:id="@+id/tvProbability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Probability : "
+            android:textColor="#ffffff"
+            app:layout_constraintTop_toBottomOf="@id/tvCost"/>
+
+        <TextView
+            android:id="@+id/tvProbabilityResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            app:layout_constraintLeft_toRightOf="@id/tvProbability"
+            app:layout_constraintTop_toBottomOf="@id/tvCostResult"/>
+
+        <ImageView
+            android:id="@+id/ivInvert"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
