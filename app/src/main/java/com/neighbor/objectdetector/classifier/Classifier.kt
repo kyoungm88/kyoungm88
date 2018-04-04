@@ -1,9 +1,10 @@
-package com.neighbor.objectdetector
+package com.neighbor.objectdetector.classifier
 
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.SystemClock
 import android.util.Log
+import com.neighbor.objectdetector.Result
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.io.IOException
@@ -82,5 +83,10 @@ class Classifier {
 
     private fun convertToGreyScale(color: Int): Float {
         return ((color shr 16 and 0xFF) + (color shr 8 and 0xFF) + (color and 0xFF)).toFloat() / 3.0f / 255.0f
+    }
+
+    fun close() {
+        mInterpreter.close()
+        mInterpreter
     }
 }

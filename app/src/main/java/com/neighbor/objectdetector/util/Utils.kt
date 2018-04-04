@@ -19,6 +19,7 @@ class Utils {
 
         val MEDIA_TYPE_IMAGE = 1
         val MEDIA_TYPE_VIDEO = 2
+        private val GRAY_THRESHOLD = 90
 
         /** Create a file Uri for saving an image or video  */
         fun getOutputMediaFileUri(type: Int): Uri {
@@ -61,28 +62,10 @@ class Utils {
 
         fun exportToBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
             val rawBitmap = grayScale(bitmap)
-//            val scaledBitmap = Bitmap.createScaledBitmap(rawBitmap, width, height, true)
-            val scaledBitmap = bitmapResize(rawBitmap, width, height)
-
-
-            bitmap.recycle()
+            val scaledBitmap = Bitmap.createScaledBitmap(rawBitmap, width, height, false)
             rawBitmap.recycle()
             return scaledBitmap
         }
-
-//        fun exportToBitmap(view: View): Bitmap {
-//            Log.d(TAG, "[exportToBitmap] view width : ${view.width / 2}, height : ${view.height / 2}")
-//            val bitmap = Bitmap.createBitmap(view.width / 2, view.height / 2, Bitmap.Config.ARGB_8888)
-//            val canvas = Canvas(bitmap)
-//            val bgDrawable = view.background
-//            if (bgDrawable != null) {
-//                bgDrawable.draw(canvas)
-//            } else {
-//                canvas.drawColor(Color.WHITE)
-//            }
-//            view.draw(canvas)
-//            return bitmap
-//        }
 
         private fun bitmapResize(bitmap: Bitmap, newWidth: Int, newHeight: Int): Bitmap {
             val scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
@@ -104,7 +87,6 @@ class Utils {
         }
 
         private fun grayScale(orgBitmap: Bitmap): Bitmap {
-            Log.i("gray", "in")
             val width = orgBitmap.width
             val height = orgBitmap.height
             val size = width * height
@@ -124,7 +106,8 @@ class Utils {
                 val B = Color.blue(color)
                 var gray = (0.2989 * R + 0.5870 * G + 0.1140 * B).toInt()
 
-                if (gray > 128)
+                // 평균 128에서 약간 더 어두운 색상도 흰색으로 표시하게 90으로 변경
+                if (gray > GRAY_THRESHOLD)
                     gray = 255
                 else
                     gray = 0
@@ -133,7 +116,6 @@ class Utils {
 
             }
             bmpGrayScale.setPixels(pixels, 0, width, 0, 0, width, height)
-            Log.i("gray", "out")
             return bmpGrayScale
 
         }
