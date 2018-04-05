@@ -4,8 +4,10 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.neighbor.objectdetector.classifier.Classifier
+import com.neighbor.objectdetector.classifier.Result
 import com.neighbor.objectdetector.util.ImageUtil
 import com.neighbor.objectdetector.util.Utils
 import kotlinx.android.synthetic.main.activity_mnist.*
@@ -18,6 +20,8 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
     private var mClassifier: Classifier? = null
 
     private var cameraFragment: Camera2Fragment? = null
+    private val listMnist = ArrayList<Result>()
+    private var mnistAdapter: MnistRecyclerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +40,13 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
             Log.e(TAG, "init(): Failed to create tflite model", e)
         }
 
+        mnistAdapter = MnistRecyclerAdapter(this, listMnist)
+        list_mnist.adapter = mnistAdapter
+
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+        list_mnist.layoutManager = linearLayoutManager
     }
 
     override fun onDestroy() {
@@ -43,13 +54,19 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
         super.onDestroy()
     }
 
-    private fun renderResult(result: Result?, bitmap: Bitmap) {
+    private fun renderResult(result: Result, bitmap: Bitmap) {
         Log.d(TAG, "[renderResult] result prediction : ${result?.getNumber()} cost : ${result?.getTimeCost()} ")
         runOnUiThread({
-            tvPredictionResult.text = result?.getNumber().toString()
-            tvCostResult.text = result?.getTimeCost().toString()
-            tvProbabilityResult.text = result?.getProbability().toString()
+            tvPredictionResult.text = result.getNumber().toString()
+            tvCostResult.text = result.getTimeCost().toString()
+            tvProbabilityResult.text = result.getProbability().toString()
             ivInvert.background = BitmapDrawable(resources, bitmap)
+
+            if (listMnist.size == 0 || listMnist[listMnist.size - 1].getNumber() != result.getNumber()) {
+                listMnist.add(result)
+            }
+
+            mnistAdapter?.notifyDataSetChanged()
         })
     }
 
@@ -58,8 +75,8 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
         // The model is trained on images with black background and white font
         val image = Utils.exportToBitmap(bitmap, Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
         val inverted = ImageUtil.invert(image)
-        Log.d(TAG, "[onPicture] inverted width : ${inverted.width}, height : ${inverted.height}")
-        val result = mClassifier?.classify(inverted)
+//        Log.d(TAG, "[onPicture] inverted width : ${inverted.width}, height : ${inverted.height}")
+        val result = mClassifier?.classify(inverted)!!
         renderResult(result, inverted)
     }
 }

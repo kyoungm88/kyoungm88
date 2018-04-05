@@ -14,13 +14,13 @@
         android:layout_height="match_parent"
         android:background="#000"
         android:tag="fragment_camera"
-        tools:layout="@layout/fragment_camera"/>
+        tools:layout="@layout/fragment_camera" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layoutMnistInfo"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="#304bba9d"
+        android:background="@color/infoBackground"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:text="Time cost : "
             android:textColor="#ffffff"
-            app:layout_constraintTop_toBottomOf="@id/tvPrediction"/>
+            app:layout_constraintTop_toBottomOf="@id/tvPrediction" />
 
         <TextView
             android:id="@+id/tvCostResult"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
             app:layout_constraintLeft_toRightOf="@id/tvCost"
-            app:layout_constraintTop_toBottomOf="@id/tvPredictionResult"/>
+            app:layout_constraintTop_toBottomOf="@id/tvPredictionResult" />
 
         <TextView
             android:id="@+id/tvProbability"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:text="Probability : "
             android:textColor="#ffffff"
-            app:layout_constraintTop_toBottomOf="@id/tvCost"/>
+            app:layout_constraintTop_toBottomOf="@id/tvCost" />
 
         <TextView
             android:id="@+id/tvProbabilityResult"
@@ -70,14 +70,26 @@
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
             app:layout_constraintLeft_toRightOf="@id/tvProbability"
-            app:layout_constraintTop_toBottomOf="@id/tvCostResult"/>
+            app:layout_constraintTop_toBottomOf="@id/tvCostResult" />
 
         <ImageView
             android:id="@+id/ivInvert"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_mnist"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/listBackground"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/layoutMnistInfo"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/item_mnist" />
+
 </android.support.constraint.ConstraintLayout>

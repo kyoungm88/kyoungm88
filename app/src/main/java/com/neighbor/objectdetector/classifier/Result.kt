@@ -1,4 +1,4 @@
-package com.neighbor.objectdetector
+package com.neighbor.objectdetector.classifier
 
 class Result {
     private var mNumber: Int

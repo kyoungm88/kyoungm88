@@ -493,7 +493,8 @@ class Camera2Fragment : Fragment() {
                 }
             }
 
-            backgroundHandler!!.post(this)
+            if (runBackgroundThread)
+                backgroundHandler!!.post(this)
         }
     }
 

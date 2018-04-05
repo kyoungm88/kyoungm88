@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.SystemClock
 import android.util.Log
-import com.neighbor.objectdetector.Result
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.io.IOException
@@ -67,7 +66,7 @@ class Classifier {
     private fun convertBitmapToByteBuffer(bitmap: Bitmap) {
         mImgData.rewind()
 
-        Log.d(TAG, "[convertBitmapToByteBuffer] width : ${bitmap.width}, height : ${bitmap.height}")
+//        Log.d(TAG, "[convertBitmapToByteBuffer] width : ${bitmap.width}, height : ${bitmap.height}")
 
         bitmap.getPixels(mImagePixels, 0, bitmap.width, 0, 0,
                 bitmap.width, bitmap.height)
