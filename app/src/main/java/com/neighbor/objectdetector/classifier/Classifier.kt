@@ -82,7 +82,6 @@ class Classifier {
     }
 
     private fun convertToGreyScale(color: Int): Float {
-//        return ((color shr 16 and 0xFF) + (color shr 8 and 0xFF) + (color and 0xFF)).toFloat() / 3.0f / 255.0f
         return (Color.red(color) + Color.green(color) + Color.blue(color)).toFloat() / 3.0f / 255.0f
     }
 

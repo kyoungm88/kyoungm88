@@ -1,10 +1,12 @@
 package com.neighbor.objectdetector
 
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.neighbor.objectdetector.classifier.CustomClassifier
+import kotlinx.android.synthetic.main.activity_custom_object.*
 import java.io.IOException
 
 class CustomObjectDetectActivity: AppCompatActivity(), Camera2Fragment.Camera2Callback {
@@ -41,7 +43,16 @@ class CustomObjectDetectActivity: AppCompatActivity(), Camera2Fragment.Camera2Ca
         super.onDestroy()
     }
 
+    private fun renderResult(data: String?, bitmap: Bitmap) {
+        runOnUiThread({
+            tvObjectResult.text = data
+            ivInvert.background = BitmapDrawable(resources, bitmap)
+        })
+    }
+
     override fun onCapture(bitmap: Bitmap) {
         Log.d(TAG, "[onCapture]")
+        val data = classifier?.classify(bitmap)
+        renderResult(data, bitmap)
     }
 }

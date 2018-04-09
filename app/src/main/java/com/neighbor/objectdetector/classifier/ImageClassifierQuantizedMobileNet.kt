@@ -50,9 +50,6 @@ internal constructor(activity: Activity) : ImageClassifier(activity) {
     }
 
     override fun addPixelValue(pixelValue: Int) {
-//        imgData!!.put((pixelValue shr 16 and 0xFF).toByte())
-//        imgData!!.put((pixelValue shr 8 and 0xFF).toByte())
-//        imgData!!.put((pixelValue and 0xFF).toByte())
         imgData!!.put(Color.red(pixelValue).toByte())
         imgData!!.put(Color.green(pixelValue).toByte())
         imgData!!.put(Color.blue(pixelValue).toByte())
