@@ -67,14 +67,14 @@ internal constructor(activity: Activity) {
      *
      * @return
      */
-    protected abstract val imageSizeX: Int
+    abstract val imageSizeX: Int
 
     /**
      * Get the image size along the y axis.
      *
      * @return
      */
-    protected abstract val imageSizeY: Int
+    abstract val imageSizeY: Int
 
     /**
      * Get the number of bytes that is used to store a single color channel value.
@@ -190,8 +190,8 @@ internal constructor(activity: Activity) {
         val startTime = SystemClock.uptimeMillis()
         for (i in 0 until imageSizeX) {
             for (j in 0 until imageSizeY) {
-                val `val` = intValues[pixel++]
-                addPixelValue(`val`)
+                val value = intValues[pixel++]
+                addPixelValue(value)
             }
         }
         val endTime = SystemClock.uptimeMillis()

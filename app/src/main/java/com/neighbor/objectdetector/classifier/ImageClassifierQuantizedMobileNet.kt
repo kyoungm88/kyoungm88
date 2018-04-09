@@ -1,6 +1,7 @@
 package com.neighbor.objectdetector.classifier
 
 import android.app.Activity
+import android.graphics.Color
 import java.io.IOException
 import kotlin.experimental.and
 
@@ -16,6 +17,10 @@ class ImageClassifierQuantizedMobileNet
 @Throws(IOException::class)
 internal constructor(activity: Activity) : ImageClassifier(activity) {
 
+    companion object {
+        val IMAGE_SCALE_WIDTH = 224
+        val IMAGE_SCALE_HEIGHT = 224
+    }
     /**
      * An array to hold inference results, to be feed into Tensorflow Lite as outputs.
      * This isn't part of the super class, because we need a primitive array here.
@@ -31,10 +36,10 @@ internal constructor(activity: Activity) : ImageClassifier(activity) {
         get() = "labels_mobilenet_quant_v1_224.txt"
 
     override val imageSizeX: Int
-        get() = 224
+        get() = IMAGE_SCALE_WIDTH
 
     override val imageSizeY: Int
-        get() = 224
+        get() = IMAGE_SCALE_HEIGHT
 
     override// the quantized model uses a single byte only
     val numBytesPerChannel: Int
@@ -45,9 +50,12 @@ internal constructor(activity: Activity) : ImageClassifier(activity) {
     }
 
     override fun addPixelValue(pixelValue: Int) {
-        imgData!!.put((pixelValue shr 16 and 0xFF).toByte())
-        imgData!!.put((pixelValue shr 8 and 0xFF).toByte())
-        imgData!!.put((pixelValue and 0xFF).toByte())
+//        imgData!!.put((pixelValue shr 16 and 0xFF).toByte())
+//        imgData!!.put((pixelValue shr 8 and 0xFF).toByte())
+//        imgData!!.put((pixelValue and 0xFF).toByte())
+        imgData!!.put(Color.red(pixelValue).toByte())
+        imgData!!.put(Color.green(pixelValue).toByte())
+        imgData!!.put(Color.blue(pixelValue).toByte())
     }
 
     override fun getProbability(labelIndex: Int): Float {

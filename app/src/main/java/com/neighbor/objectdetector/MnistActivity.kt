@@ -9,7 +9,6 @@ import android.util.Log
 import com.neighbor.objectdetector.classifier.Classifier
 import com.neighbor.objectdetector.classifier.Result
 import com.neighbor.objectdetector.util.ImageUtil
-import com.neighbor.objectdetector.util.Utils
 import kotlinx.android.synthetic.main.activity_mnist.*
 import java.io.IOException
 
@@ -28,17 +27,22 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
 
         setContentView(R.layout.activity_mnist)
 
-        cameraFragment = supportFragmentManager.findFragmentById(R.id.camera2Fragment) as Camera2Fragment
-
+        initData()
         initUI()
     }
 
-    private fun initUI() {
+    private fun initData() {
         try {
             mClassifier = Classifier(this)
         } catch (e: IOException) {
             Log.e(TAG, "init(): Failed to create tflite model", e)
         }
+
+        cameraFragment = supportFragmentManager.findFragmentById(R.id.camera2Fragment) as Camera2Fragment
+        cameraFragment?.initImageFrameSize(Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
+    }
+
+    private fun initUI() {
 
         mnistAdapter = MnistRecyclerAdapter(this, listMnist)
         list_mnist.adapter = mnistAdapter
@@ -55,7 +59,7 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
     }
 
     private fun renderResult(result: Result, bitmap: Bitmap) {
-        Log.d(TAG, "[renderResult] result prediction : ${result?.getNumber()} cost : ${result?.getTimeCost()} ")
+        Log.d(TAG, "[renderResult] result prediction : ${result.getNumber()} cost : ${result.getTimeCost()} ")
         runOnUiThread({
             tvPredictionResult.text = result.getNumber().toString()
             tvCostResult.text = result.getTimeCost().toString()
@@ -71,9 +75,9 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
     }
 
     override fun onCapture(bitmap: Bitmap) {
-        Log.d(TAG, "[onPicture]")
+        Log.d(TAG, "[onCapture]")
         // The model is trained on images with black background and white font
-        val image = Utils.exportToBitmap(bitmap, Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
+        val image = ImageUtil.exportToBitmap(bitmap, Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
         val inverted = ImageUtil.invert(image)
 //        Log.d(TAG, "[onPicture] inverted width : ${inverted.width}, height : ${inverted.height}")
         val result = mClassifier?.classify(inverted)!!

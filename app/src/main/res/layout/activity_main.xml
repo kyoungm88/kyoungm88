@@ -4,15 +4,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainBackground"
+    android:padding="30dp"
     tools:context=".MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="80dp"
+        android:text="@string/app_name"
+        android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="220dp" />
+
+    <GridLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:columnCount="2"
+        android:rowCount="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline1">
+
+        <Button
+            android:id="@+id/btnMnist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:layout_columnWeight="0.5"
+            android:layout_rowSpan="1"
+            android:layout_rowWeight="0.5"
+            android:text="Number Detect" />
+
+        <Button
+            android:id="@+id/btnObject"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:layout_columnWeight="0.5"
+            android:layout_rowSpan="2"
+            android:layout_rowWeight="0.5"
+            android:text="Object Detect" />
+
+        <Button
+            android:id="@+id/btnCustomObject"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:layout_columnWeight="0.5"
+            android:layout_rowSpan="2"
+            android:layout_rowWeight="0.5"
+            android:text="Custom Object Detect" />
+
+        <Button
+            android:id="@+id/btnObject2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="1"
+            android:layout_columnWeight="0.5"
+            android:layout_rowSpan="2"
+            android:layout_rowWeight="0.5"
+            android:text="Dummy" />
+    </GridLayout>
 
 </android.support.constraint.ConstraintLayout>

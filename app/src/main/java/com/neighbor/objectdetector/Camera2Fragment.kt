@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.util.Size
 import android.view.*
-import com.neighbor.objectdetector.classifier.Classifier
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.util.*
 import java.util.concurrent.Semaphore
@@ -41,10 +40,6 @@ class Camera2Fragment : Fragment() {
 
         /** Max preview height that is guaranteed by Camera2 API */
         private val MAX_PREVIEW_HEIGHT = 1080
-
-        fun newInstance(): Camera2Fragment {
-            return Camera2Fragment()
-        }
     }
 
     private var cameraCallback: Camera2Callback? = null
@@ -53,6 +48,9 @@ class Camera2Fragment : Fragment() {
     private var runClassifier = false
     private var checkedPermissions = false
     private var runBackgroundThread = false
+
+    private var imageFrameWidth = 0
+    private var imageFrameHeight = 0
 
     /**
      * [TextureView.SurfaceTextureListener] handles several lifecycle events on a [ ].
@@ -223,12 +221,6 @@ class Camera2Fragment : Fragment() {
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
-    /** Load the model and labels.  */
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-//        startBackgroundThread()
-    }
-
     override fun onStart() {
         super.onStart()
 
@@ -261,6 +253,11 @@ class Camera2Fragment : Fragment() {
         super.onStop()
 
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    fun initImageFrameSize(width: Int, height: Int) {
+        imageFrameWidth = width
+        imageFrameHeight = height
     }
 
     /**
@@ -591,13 +588,13 @@ class Camera2Fragment : Fragment() {
 
     /** Classifies a frame from the preview stream.  */
     private fun getFrame() {
-        if (activity == null || cameraDevice == null) {
+        if (activity == null || cameraDevice == null || imageFrameWidth <= 0 || imageFrameHeight <= 0) {
 //            Log.w(TAG,"Uninitialized Classifier or invalid context.")
             return
         }
-        val bitmap = textureView!!.getBitmap(Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
+        val bitmap = textureView!!.getBitmap(imageFrameWidth, imageFrameHeight)
         cameraCallback?.onCapture(bitmap)
-        bitmap.recycle()
+//        bitmap.recycle()
     }
 
     /** Compares two `Size`s based on their areas.  */
