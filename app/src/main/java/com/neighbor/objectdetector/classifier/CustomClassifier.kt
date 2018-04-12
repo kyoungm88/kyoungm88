@@ -80,7 +80,7 @@ class CustomClassifier {
     private fun loadModelFile(activity: Activity): MappedByteBuffer {
         val fileDescriptor = activity.assets.openFd(MODEL_PATH)
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
-        val fileChannel = inputStream.getChannel()
+        val fileChannel = inputStream.channel
         val startOffset = fileDescriptor.startOffset
         val declaredLength = fileDescriptor.declaredLength
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)

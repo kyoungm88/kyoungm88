@@ -1,12 +1,14 @@
 package com.neighbor.objectdetector.classifier
 
-class Result {
-    private var mNumber: Int
-    private var mProbability: Float
-    private var mTimeCost: Long
+import com.neighbor.objectdetector.util.Utils
 
-    constructor(result: FloatArray, timeCost: Long) {
-        mNumber = argmax(result)
+class Result(result: FloatArray, timeCost: Long) {
+    private val mNumber: Int
+    private val mProbability: Float
+    private val mTimeCost: Long
+
+    init {
+        mNumber = Utils.argmax(result)
         mProbability = result[mNumber]
         mTimeCost = timeCost
     }
@@ -23,15 +25,4 @@ class Result {
         return mTimeCost
     }
 
-    private fun argmax(probs: FloatArray): Int {
-        var maxIdx = -1
-        var maxProb = 0.0f
-        for (i in probs.indices) {
-            if (probs[i] > maxProb) {
-                maxProb = probs[i]
-                maxIdx = i
-            }
-        }
-        return maxIdx
-    }
 }

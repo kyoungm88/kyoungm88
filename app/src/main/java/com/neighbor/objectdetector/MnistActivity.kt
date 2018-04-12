@@ -76,11 +76,14 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
 
     override fun onCapture(bitmap: Bitmap) {
         Log.d(TAG, "[onCapture]")
+
+        val blackAndWhiteBitmap = ImageUtil.convertToBlackAndWhite(bitmap)
         // The model is trained on images with black background and white font
-        val image = ImageUtil.exportToBitmap(bitmap, Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
-        val inverted = ImageUtil.invert(image)
+        val inverted = ImageUtil.invert(blackAndWhiteBitmap)
 //        Log.d(TAG, "[onPicture] inverted width : ${inverted.width}, height : ${inverted.height}")
         val result = mClassifier?.classify(inverted)!!
-        renderResult(result, inverted)
+        val grayscale = ImageUtil.convertToGrayScale(inverted)
+//        val invert = ImageUtil.invert(grayscale)
+        renderResult(result, grayscale)
     }
 }

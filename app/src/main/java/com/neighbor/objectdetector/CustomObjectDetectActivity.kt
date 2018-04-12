@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.neighbor.objectdetector.classifier.CustomClassifier
+import com.neighbor.objectdetector.util.ImageUtil
 import kotlinx.android.synthetic.main.activity_custom_object.*
 import java.io.IOException
 
@@ -52,7 +53,8 @@ class CustomObjectDetectActivity: AppCompatActivity(), Camera2Fragment.Camera2Ca
 
     override fun onCapture(bitmap: Bitmap) {
         Log.d(TAG, "[onCapture]")
-        val data = classifier?.classify(bitmap)
-        renderResult(data, bitmap)
+        val resizeBitmap = ImageUtil.bitmapResize(bitmap, CustomClassifier.DIM_IMG_SIZE_WIDTH, CustomClassifier.DIM_IMG_SIZE_HEIGHT)
+        val data = classifier?.classify(resizeBitmap)
+        renderResult(data, resizeBitmap)
     }
 }

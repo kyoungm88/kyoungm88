@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream
 object ImageUtil {
 
     private const val GRAY_THRESHOLD = 90
+    private val TAG = ImageUtil::class.java.simpleName
 
     private val INVERT = ColorMatrix(
             floatArrayOf(
@@ -87,13 +88,13 @@ object ImageUtil {
     }
 
     fun exportToBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-        val rawBitmap = grayScale(bitmap)
+        val rawBitmap = convertToGrayScale(bitmap)
 //            val scaledBitmap = Bitmap.createScaledBitmap(rawBitmap, width, height, false)
 //            rawBitmap.recycle()
         return rawBitmap
     }
 
-    private fun bitmapResize(bitmap: Bitmap, newWidth: Int, newHeight: Int): Bitmap {
+    fun bitmapResize(bitmap: Bitmap, newWidth: Int, newHeight: Int): Bitmap {
         val scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888)
 
         val ratioX = newWidth / bitmap.width.toFloat()
@@ -112,7 +113,35 @@ object ImageUtil {
 
     }
 
-    private fun grayScale(orgBitmap: Bitmap): Bitmap {
+    fun convertToGrayScale(orgBitmap: Bitmap): Bitmap {
+        val width = orgBitmap.width
+        val height = orgBitmap.height
+        val size = width * height
+
+        val pixels = IntArray(size)
+        orgBitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+
+        val bmpGrayScale = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+
+        for (i in 0 until size) {
+            val color = pixels[i]
+
+            val A = Color.alpha(color)
+            val R = Color.red(color)
+            val G = Color.green(color)
+            val B = Color.blue(color)
+            val gray = (0.2989 * R + 0.5870 * G + 0.1140 * B).toInt()
+
+            pixels[i] = Color.argb(A, gray, gray, gray)
+
+        }
+        bmpGrayScale.setPixels(pixels, 0, width, 0, 0, width, height)
+        return bmpGrayScale
+
+    }
+
+    fun convertToBlackAndWhite(orgBitmap: Bitmap): Bitmap {
         val width = orgBitmap.width
         val height = orgBitmap.height
         val size = width * height
@@ -135,8 +164,6 @@ object ImageUtil {
             // 평균 128에서 약간 더 어두운 색상도 흰색으로 표시하게 90으로 변경
             if (gray > GRAY_THRESHOLD)
                 gray = 255
-            else
-                gray = 0
 
             pixels[i] = Color.argb(A, gray, gray, gray)
 

@@ -58,7 +58,7 @@ class Classifier {
     private fun loadModelFile(activity: Activity): MappedByteBuffer {
         val fileDescriptor = activity.assets.openFd(MODEL_PATH)
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
-        val fileChannel = inputStream.getChannel()
+        val fileChannel = inputStream.channel
         val startOffset = fileDescriptor.startOffset
         val declaredLength = fileDescriptor.declaredLength
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
@@ -82,7 +82,8 @@ class Classifier {
     }
 
     private fun convertToGreyScale(color: Int): Float {
-        return (Color.red(color) + Color.green(color) + Color.blue(color)).toFloat() / 3.0f / 255.0f
+//        return (Color.red(color) + Color.green(color) + Color.blue(color)).toFloat() / 3.0f / 255.0f
+        return (Color.red(color) * 0.2989 + Color.green(color) * 0.5870 + Color.blue(color) * 0.1140).toFloat() / 255f
     }
 
     fun close() {
