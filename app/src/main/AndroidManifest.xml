@@ -36,6 +36,11 @@
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             />
+
+        <activity android:name=".CustomObjectDetect128Activity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

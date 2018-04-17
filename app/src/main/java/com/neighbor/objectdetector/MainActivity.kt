@@ -27,8 +27,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(getIntent(ObjectDetectActivity::class.java))
         })
 
-        btnCustomObject.setOnClickListener({
+        btnCustomObject32.setOnClickListener({
             startActivity(getIntent(CustomObjectDetectActivity::class.java))
+        })
+
+        btnCustomObject128.setOnClickListener({
+            startActivity(getIntent(CustomObjectDetect128Activity::class.java))
         })
     }
 

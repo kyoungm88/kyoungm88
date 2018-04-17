@@ -1,5 +1,6 @@
 package com.neighbor.objectdetector.util
 
+import android.app.Activity
 import android.graphics.*
 import android.net.Uri
 import android.os.Environment
@@ -9,6 +10,10 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.Paint.FILTER_BITMAP_FLAG
+import java.io.FileOutputStream
+import java.nio.ByteBuffer
+import android.content.Intent
+
 
 
 
@@ -56,6 +61,37 @@ object Utils {
         }
 
         return mediaFile
+    }
+
+    fun makeFile(activity: Activity, fileName: String, byteBuffer: ByteBuffer) {
+        val file = getOutputFile(fileName)
+        val fos = FileOutputStream(file)
+
+        fos.write(byteBuffer.array())
+        fos.close()
+
+        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        intent.data = Uri.fromFile(file)
+        activity.sendBroadcast(intent)
+    }
+
+    private fun getOutputFile(fileName: String): File? {
+        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), "ObjectDetect")
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "failed to create directory")
+                return null
+            }
+        }
+
+        // Create a media file name
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val tempFile = File(mediaStorageDir.getPath() + File.separator +
+                    fileName + timeStamp + ".txt")
+
+        return tempFile
     }
 
     fun argmax(probs: FloatArray): Int {

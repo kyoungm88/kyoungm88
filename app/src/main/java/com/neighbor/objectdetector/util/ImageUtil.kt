@@ -2,6 +2,7 @@ package com.neighbor.objectdetector.util
 
 import android.graphics.*
 import android.media.Image
+import android.util.Log
 import java.io.ByteArrayOutputStream
 
 
@@ -111,6 +112,48 @@ object ImageUtil {
 
         return scaledBitmap
 
+    }
+
+    fun cropCenterBitmap(src: Bitmap): Bitmap {
+        Log.d(TAG, "[cropCenterBitmap]")
+        val width = src.width
+        val height = src.height
+        var cropSize = width
+
+        var x = 0
+        var y = 0
+
+        if (width > height) {
+            cropSize = height
+        }
+
+
+        if (width > cropSize)
+            x = (width - cropSize) / 2
+
+        if (height > cropSize)
+            y = (height - cropSize) / 2
+
+        var cw = cropSize // crop width
+        var ch = cropSize // crop height
+
+        if (cropSize > width)
+            cw = width
+
+        if (cropSize > height)
+            ch = height
+
+        val des = Bitmap.createBitmap(src, x, y, cw, ch)
+        src.recycle()
+        return des
+    }
+
+
+    fun scaleBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
+        Log.d(TAG, "[scaleBitmap]")
+        val scaleChangeBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false)
+        bitmap.recycle()
+        return scaleChangeBitmap
     }
 
     fun convertToGrayScale(orgBitmap: Bitmap): Bitmap {

@@ -30,7 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Number Detect"
-        app:layout_constraintBottom_toTopOf="@id/btnCustomObject"
+        app:layout_constraintBottom_toTopOf="@id/btnCustomObject32"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/btnObject"
         app:layout_constraintTop_toBottomOf="@id/guideline1" />
@@ -40,28 +40,28 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Object Detect"
-        app:layout_constraintBottom_toTopOf="@id/btnObject2"
+        app:layout_constraintBottom_toTopOf="@id/btnCustomObject128"
         app:layout_constraintLeft_toRightOf="@id/btnMnist"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline1" />
 
     <Button
-        android:id="@+id/btnCustomObject"
+        android:id="@+id/btnCustomObject32"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Custom Object Detect"
+        android:text="Custom Object Detect(32x32)"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btnObject2"
+        app:layout_constraintRight_toLeftOf="@id/btnCustomObject128"
         app:layout_constraintTop_toBottomOf="@id/btnMnist" />
 
     <Button
-        android:id="@+id/btnObject2"
+        android:id="@+id/btnCustomObject128"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Dummy"
+        android:text="Custom Object Detect(128x128)"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/btnCustomObject"
+        app:layout_constraintLeft_toRightOf="@id/btnCustomObject32"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnObject" />
 
