@@ -5,8 +5,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.neighbor.objectdetector.classifier.CustomClassifier
 import com.neighbor.objectdetector.classifier.ImageClassifier
 import com.neighbor.objectdetector.classifier.ImageClassifierQuantizedMobileNet
+import com.neighbor.objectdetector.util.ImageUtil
 import kotlinx.android.synthetic.main.activity_object.*
 import java.io.IOException
 
@@ -34,8 +36,6 @@ class ObjectDetectActivity: AppCompatActivity(), Camera2Fragment.Camera2Callback
             e.printStackTrace()
         }
         cameraFragment = supportFragmentManager.findFragmentById(R.id.camera2Fragment) as Camera2Fragment
-        cameraFragment?.initImageFrameSize(ImageClassifierQuantizedMobileNet.IMAGE_SCALE_WIDTH,
-                ImageClassifierQuantizedMobileNet.IMAGE_SCALE_HEIGHT)
     }
 
     private fun renderResult(data: String?, bitmap: Bitmap) {
@@ -55,9 +55,12 @@ class ObjectDetectActivity: AppCompatActivity(), Camera2Fragment.Camera2Callback
 
     override fun onCapture(bitmap: Bitmap) {
         Log.d(TAG, "[onCapture]")
-        val result = imageLabel?.classifyFrame(bitmap)
+        val cropBitmap = ImageUtil.cropCenterBitmap(bitmap)
+        val resizeBitmap = ImageUtil.scaleBitmap(cropBitmap, CustomClassifier.DIM_IMG_SIZE_WIDTH, CustomClassifier.DIM_IMG_SIZE_HEIGHT)
+
+        val result = imageLabel?.classifyFrame(resizeBitmap)
         Log.d(TAG, "[onCapture] result : $result")
-        renderResult(result, bitmap)
+        renderResult(result, resizeBitmap)
     }
 
 }

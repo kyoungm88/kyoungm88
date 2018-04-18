@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.neighbor.objectdetector.classifier.Classifier
+import com.neighbor.objectdetector.classifier.CustomClassifier
 import com.neighbor.objectdetector.classifier.Result
 import com.neighbor.objectdetector.util.ImageUtil
 import kotlinx.android.synthetic.main.activity_mnist.*
@@ -39,7 +40,6 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
         }
 
         cameraFragment = supportFragmentManager.findFragmentById(R.id.camera2Fragment) as Camera2Fragment
-        cameraFragment?.initImageFrameSize(Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
     }
 
     private fun initUI() {
@@ -77,7 +77,10 @@ class MnistActivity : AppCompatActivity(), Camera2Fragment.Camera2Callback {
     override fun onCapture(bitmap: Bitmap) {
         Log.d(TAG, "[onCapture]")
 
-        val blackAndWhiteBitmap = ImageUtil.convertToBlackAndWhite(bitmap)
+        val cropBitmap = ImageUtil.cropCenterBitmap(bitmap)
+        val resizeBitmap = ImageUtil.scaleBitmap(cropBitmap, Classifier.DIM_IMG_SIZE_WIDTH, Classifier.DIM_IMG_SIZE_HEIGHT)
+
+        val blackAndWhiteBitmap = ImageUtil.convertToBlackAndWhite(resizeBitmap)
         // The model is trained on images with black background and white font
         val inverted = ImageUtil.invert(blackAndWhiteBitmap)
 //        Log.d(TAG, "[onPicture] inverted width : ${inverted.width}, height : ${inverted.height}")

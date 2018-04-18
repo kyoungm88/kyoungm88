@@ -1,8 +1,8 @@
 package com.neighbor.objectdetector
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         btnCustomObject128.setOnClickListener({
             startActivity(getIntent(CustomObjectDetect128Activity::class.java))
         })
+
     }
 
     private fun getIntent(cls: Class<*>): Intent {

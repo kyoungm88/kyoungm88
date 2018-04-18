@@ -38,9 +38,6 @@ class Custom128Classifier {
     private var mInterpreter: Interpreter
     private val mLabelList: List<String>
     private var mImgData: ByteBuffer
-    private var mImgRData: ByteBuffer
-    private var mImgGData: ByteBuffer
-    private var mImgBData: ByteBuffer
     private val IMAGEBUFFER_SIZE = 4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_HEIGHT * DIM_IMG_SIZE_WIDTH
     private val mImagePixels = IntArray(DIM_IMG_SIZE_HEIGHT * DIM_IMG_SIZE_WIDTH)
     private val mResult = Array(1) { FloatArray(CATEGORY_COUNT) }
@@ -61,20 +58,12 @@ class Custom128Classifier {
         mImgData = ByteBuffer.allocateDirect(IMAGEBUFFER_SIZE * DIM_PIXEL_SIZE)
         mImgData.order(ByteOrder.nativeOrder())
 
-        mImgRData = ByteBuffer.allocateDirect(IMAGEBUFFER_SIZE)
-        mImgGData = ByteBuffer.allocateDirect(IMAGEBUFFER_SIZE)
-        mImgBData = ByteBuffer.allocateDirect(IMAGEBUFFER_SIZE)
-
-        mImgRData.order(ByteOrder.nativeOrder())
-        mImgGData.order(ByteOrder.nativeOrder())
-        mImgBData.order(ByteOrder.nativeOrder())
-
         mFilterLabelProbArray = Array(FILTER_STAGES) { FloatArray(CATEGORY_COUNT) }
 //        mResult = Array(1) { ByteArray(CATEGORY_COUNT) }
     }
 
     fun classify(bitmap: Bitmap): String {
-        Log.d(TAG, "[classify]")
+//        Log.d(TAG, "[classify]")
         convertBitmapToByteBuffer(bitmap)
         val startTime = SystemClock.uptimeMillis()
         mInterpreter.run(mImgData, mResult)
@@ -115,10 +104,6 @@ class Custom128Classifier {
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap) {
         mImgData.rewind()
-        mImgRData.rewind()
-        mImgGData.rewind()
-        mImgBData.rewind()
-//        Log.d(TAG, "[convertBitmapToByteBuffer] width : ${bitmap.width}, height : ${bitmap.height}")
 
         bitmap.getPixels(mImagePixels, 0, bitmap.width, 0, 0,
         bitmap.width, bitmap.height)
@@ -126,59 +111,16 @@ class Custom128Classifier {
         var pixel = 0
         for (i in 0 until DIM_IMG_SIZE_WIDTH) {
             for (j in 0 until DIM_IMG_SIZE_HEIGHT) {
-                val value = mImagePixels[pixel]
-                addPixelValue(pixel++, value)
+                val value = mImagePixels[pixel++]
+                addPixelValue(value)
             }
         }
-
-        addImageDataValue()
     }
 
-    private fun addPixelValue(index: Int, pixelValue: Int) {
-//        val imgRData = ByteBuffer.allocateDirect(IMAGEBUFFER_SIZE)
-//        imgRData.order(ByteOrder.nativeOrder())
-//        imgRData.putFloat(Color.red(pixelValue).toFloat() / 255f)
-//
-//        val tempBuffer = ByteBuffer.allocate(4)
-//        tempBuffer.order(ByteOrder.nativeOrder())
-//        tempBuffer.putFloat(Color.red(pixelValue).toFloat() / 255f)
-
-//        Log.d(TAG, "imgRData : ${tempBuffer.array()}")
-        val i = index * 4
-        mImgData.putFloat(i, Color.red(pixelValue).toFloat() / 255f)
-        mImgData.putFloat(i + IMAGEBUFFER_SIZE, Color.green(pixelValue).toFloat() / 255f)
-        mImgData.putFloat(i + (IMAGEBUFFER_SIZE * 2), Color.blue(pixelValue).toFloat() / 255f)
-    }
-
-    var count = 0
-
-    private fun addImageDataValue() {
-//        mImgRData.flip()
-//        mImgGData.flip()
-//        mImgBData.flip()
-//
-//        addImageData(mImgRData)
-//        addImageData(mImgGData)
-//        addImageData(mImgBData)
-//        mImgData.put(mImgRData)
-//        mImgData.put(mImgGData)
-//        mImgData.put(mImgBData)
-
-        if (count == 1) {
-//            Utils.makeFile(activity, "R_Data", mImgRData)
-//            Utils.makeFile(activity, "G_Data", mImgGData)
-//            Utils.makeFile(activity, "B_Data", mImgBData)
-            Utils.makeFile(activity, "Result_Data", mImgData)
-
-        } else if (count <=0){
-            count++
-        }
-    }
-
-    private fun addImageData(byteBuffer: ByteBuffer) {
-        for (i in 0 until  IMAGEBUFFER_SIZE) {
-            mImgData.put(byteBuffer.get(i))
-        }
+    private fun addPixelValue(pixelValue: Int) {
+        mImgData.putFloat(Color.red(pixelValue).toFloat() / 255f)
+        mImgData.putFloat(Color.green(pixelValue).toFloat() / 255f)
+        mImgData.putFloat(Color.blue(pixelValue).toFloat() / 255f)
     }
 
     private fun applyFilter() {

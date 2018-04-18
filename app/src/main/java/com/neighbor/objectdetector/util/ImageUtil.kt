@@ -2,8 +2,10 @@ package com.neighbor.objectdetector.util
 
 import android.graphics.*
 import android.media.Image
+import android.os.Environment
 import android.util.Log
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 object ImageUtil {
@@ -115,7 +117,6 @@ object ImageUtil {
     }
 
     fun cropCenterBitmap(src: Bitmap): Bitmap {
-        Log.d(TAG, "[cropCenterBitmap]")
         val width = src.width
         val height = src.height
         var cropSize = width
@@ -144,15 +145,12 @@ object ImageUtil {
             ch = height
 
         val des = Bitmap.createBitmap(src, x, y, cw, ch)
-        src.recycle()
         return des
     }
 
 
     fun scaleBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-        Log.d(TAG, "[scaleBitmap]")
         val scaleChangeBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false)
-        bitmap.recycle()
         return scaleChangeBitmap
     }
 
@@ -214,5 +212,13 @@ object ImageUtil {
         bmpGrayScale.setPixels(pixels, 0, width, 0, 0, width, height)
         return bmpGrayScale
 
+    }
+
+    // test용
+    fun getBitmap(): Bitmap {
+        val filePath = File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), "ObjectDetect")
+        val file = File(filePath.path + File.separator + "image_0001.jpg")
+        return BitmapFactory.decodeFile(file.absolutePath)
     }
 }

@@ -49,9 +49,6 @@ class Camera2Fragment : Fragment() {
     private var checkedPermissions = false
     private var runBackgroundThread = false
 
-    private var imageFrameWidth = 0
-    private var imageFrameHeight = 0
-
     /**
      * [TextureView.SurfaceTextureListener] handles several lifecycle events on a [ ].
      */
@@ -255,11 +252,6 @@ class Camera2Fragment : Fragment() {
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    fun initImageFrameSize(width: Int, height: Int) {
-        imageFrameWidth = width
-        imageFrameHeight = height
-    }
-
     /**
      * Sets up member variables related to camera.
      *
@@ -363,13 +355,7 @@ class Camera2Fragment : Fragment() {
     }
 
     private fun getRequiredPermissions(): Array<String?> {
-        val activity = activity
         try {
-//            val info = activity!!
-//                    .packageManager
-//                    .getPackageInfo(activity.packageName, PackageManager.GET_PERMISSIONS)
-//            val ps = info.requestedPermissions
-
             val ps = arrayOfNulls<String?>(2)
             ps[0] = Manifest.permission.CAMERA
             ps[1] = Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -588,12 +574,12 @@ class Camera2Fragment : Fragment() {
 
     /** Classifies a frame from the preview stream.  */
     private fun getFrame() {
-        if (activity == null || cameraDevice == null || imageFrameWidth <= 0 || imageFrameHeight <= 0) {
+        if (activity == null || cameraDevice == null) {
 //            Log.w(TAG,"Uninitialized Classifier or invalid context.")
             return
         }
 //        val bitmap = textureView!!.getBitmap(imageFrameWidth, imageFrameHeight)
-        val bitmap = textureView!!.getBitmap(textureView.measuredWidth, textureView.measuredHeight)
+        val bitmap = textureView!!.getBitmap(textureView.measuredWidth / 4, textureView.measuredHeight / 4)
         cameraCallback?.onCapture(bitmap)
 //        bitmap.recycle()
     }
