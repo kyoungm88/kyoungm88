@@ -2,9 +2,11 @@ package com.neighbor.objectdetector
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import com.neighbor.objectdetector.classifier.Custom128Classifier
 import com.neighbor.objectdetector.classifier.CustomClassifier
 import com.neighbor.objectdetector.util.ImageUtil
@@ -35,6 +37,7 @@ class CustomObjectDetectActivity: AppCompatActivity(), Camera2Fragment.Camera2Ca
             e.printStackTrace()
         }
 
+        layoutMnistInfo.visibility = View.INVISIBLE
         cameraFragment = supportFragmentManager.findFragmentById(R.id.camera2Fragment) as Camera2Fragment
     }
 

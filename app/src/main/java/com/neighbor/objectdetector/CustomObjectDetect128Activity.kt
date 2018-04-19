@@ -8,6 +8,7 @@ import android.os.Environment
 import android.support.annotation.DrawableRes
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import com.neighbor.objectdetector.classifier.Custom128Classifier
 import com.neighbor.objectdetector.classifier.CustomClassifier
 import com.neighbor.objectdetector.util.ImageUtil

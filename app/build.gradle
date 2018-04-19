@@ -39,7 +39,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:support-fragment:27.1.0'
-    implementation 'org.tensorflow:tensorflow-lite:0.1.2-nightly'
+    implementation 'org.tensorflow:tensorflow-lite:0.1.8-rc0'
 
     implementation 'com.android.support:cardview-v7:27.1.0'
     implementation 'com.android.support:recyclerview-v7:27.1.0'

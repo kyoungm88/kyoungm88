@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.SystemClock
 import android.util.Log
-import com.neighbor.objectdetector.util.Utils
 import org.tensorflow.lite.Interpreter
 import java.io.*
 import java.nio.ByteBuffer
@@ -26,23 +25,19 @@ class Custom128Classifier {
     private val CATEGORY_COUNT = 3
 
     private val RESULTS_TO_SHOW = 3
-    private val FILTER_STAGES = 3
-    private val FILTER_FACTOR = 0.4f
+    private val IMAGE_BUFFER_SIZE = 4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_HEIGHT * DIM_IMG_SIZE_WIDTH
 
     companion object {
         val DIM_IMG_SIZE_WIDTH = 128
         val DIM_IMG_SIZE_HEIGHT = 128
     }
 
-    private val activity: Activity
     private var mInterpreter: Interpreter
     private val mLabelList: List<String>
     private var mImgData: ByteBuffer
-    private val IMAGEBUFFER_SIZE = 4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_HEIGHT * DIM_IMG_SIZE_WIDTH
     private val mImagePixels = IntArray(DIM_IMG_SIZE_HEIGHT * DIM_IMG_SIZE_WIDTH)
     private val mResult = Array(1) { FloatArray(CATEGORY_COUNT) }
 
-    private var mFilterLabelProbArray: Array<FloatArray>? = null
     private val sortedLabels = PriorityQueue<Map.Entry<String, Float>>(
             RESULTS_TO_SHOW,
             Comparator<Map.Entry<String, Float>> {
@@ -52,14 +47,10 @@ class Custom128Classifier {
 
     @Throws(IOException::class)
     constructor(activity: Activity) {
-        this.activity = activity
         mInterpreter = Interpreter(loadModelFile(activity))
         mLabelList = loadLabelList(activity)
-        mImgData = ByteBuffer.allocateDirect(IMAGEBUFFER_SIZE * DIM_PIXEL_SIZE)
+        mImgData = ByteBuffer.allocateDirect(IMAGE_BUFFER_SIZE * DIM_PIXEL_SIZE)
         mImgData.order(ByteOrder.nativeOrder())
-
-        mFilterLabelProbArray = Array(FILTER_STAGES) { FloatArray(CATEGORY_COUNT) }
-//        mResult = Array(1) { ByteArray(CATEGORY_COUNT) }
     }
 
     fun classify(bitmap: Bitmap): String {
@@ -72,7 +63,6 @@ class Custom128Classifier {
         Log.v(TAG, "run(): result = " + Arrays.toString(mResult[0])
                 + ", timeCost = " + timeCost)
 
-//        applyFilter()
         var textToShow = printTopKLabels()
         textToShow = java.lang.Long.toString(endTime - startTime) + "ms" + textToShow
         return textToShow
@@ -121,34 +111,6 @@ class Custom128Classifier {
         mImgData.putFloat(Color.red(pixelValue).toFloat() / 255f)
         mImgData.putFloat(Color.green(pixelValue).toFloat() / 255f)
         mImgData.putFloat(Color.blue(pixelValue).toFloat() / 255f)
-    }
-
-    private fun applyFilter() {
-        val numLabels = CATEGORY_COUNT
-
-        // Low pass filter `labelProbArray` into the first stage of the filter.
-        for (j in 0 until numLabels) {
-            mFilterLabelProbArray!![0][j] += FILTER_FACTOR * (getProbability(j) - mFilterLabelProbArray!![0][j])
-        }
-        // Low pass filter each stage into the next.
-        for (i in 1 until FILTER_STAGES) {
-            for (j in 0 until numLabels) {
-                mFilterLabelProbArray!![i][j] += FILTER_FACTOR * (mFilterLabelProbArray!![i - 1][j] - mFilterLabelProbArray!![i][j])
-            }
-        }
-
-        // Copy the last stage filter output back to `labelProbArray`.
-        for (j in 0 until numLabels) {
-            setProbability(j, mFilterLabelProbArray!![FILTER_STAGES - 1][j])
-        }
-    }
-
-    private fun getProbability(labelIndex: Int): Float {
-        return mResult[0][labelIndex]
-    }
-
-    private fun setProbability(labelIndex: Int, value: Number) {
-        mResult[0][labelIndex] = value.toFloat()
     }
 
     private fun getNormalizedProbability(labelIndex: Int): Float {

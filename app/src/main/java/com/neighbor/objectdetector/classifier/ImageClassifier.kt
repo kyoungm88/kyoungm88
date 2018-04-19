@@ -127,7 +127,7 @@ internal constructor(activity: Activity) {
         return textToShow
     }
 
-    internal fun applyFilter() {
+    private fun applyFilter() {
         val numLabels = numLabels
 
         // Low pass filter `labelProbArray` into the first stage of the filter.

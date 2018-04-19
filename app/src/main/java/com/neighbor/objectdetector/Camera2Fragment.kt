@@ -578,7 +578,6 @@ class Camera2Fragment : Fragment() {
 //            Log.w(TAG,"Uninitialized Classifier or invalid context.")
             return
         }
-//        val bitmap = textureView!!.getBitmap(imageFrameWidth, imageFrameHeight)
         val bitmap = textureView!!.getBitmap(textureView.measuredWidth / 4, textureView.measuredHeight / 4)
         cameraCallback?.onCapture(bitmap)
 //        bitmap.recycle()

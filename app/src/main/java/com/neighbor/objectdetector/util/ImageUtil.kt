@@ -128,15 +128,14 @@ object ImageUtil {
             cropSize = height
         }
 
-
         if (width > cropSize)
             x = (width - cropSize) / 2
 
         if (height > cropSize)
             y = (height - cropSize) / 2
 
-        var cw = cropSize // crop width
-        var ch = cropSize // crop height
+        var cw = cropSize
+        var ch = cropSize
 
         if (cropSize > width)
             cw = width
